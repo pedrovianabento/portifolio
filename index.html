@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antonucci Soluções - Climatização e Elétrica</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    * { font-family: 'Inter', sans-serif; }
+    
+    body { 
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      min-height: 100vh;
+    }
+    
+    /* Cores da nova logo */
+    :root {
+      --blue-primary: #1e40af;
+      --blue-light: #3b82f6;
+      --copper: #b87333;
+      --copper-light: #d4a574;
+      --silver: #c0c0c0;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, var(--blue-light) 0%, var(--copper) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, var(--blue-primary) 0%, var(--copper) 100%);
+    }
+    
+    .glass {
+      background: rgba(30, 64, 175, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(184, 115, 51, 0.2);
+    }
+    
+    .glass:hover {
+      border-color: rgba(184, 115, 51, 0.4);
+    }
+    
+    .card-hover {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 50px -12px rgba(184, 115, 51, 0.3);
+    }
+    
+    .logo-glow {
+      filter: drop-shadow(0 0 30px rgba(184, 115, 51, 0.5));
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue-primary) 0%, var(--copper) 100%);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(184, 115, 51, 0.4);
+    }
+    
+    .grid-masonry {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    
+    .modal.active { display: flex; }
+    
+    .admin-panel {
+      display: none;
+    }
+    
+    .admin-panel.active {
+      display: block;
+    }
+    
+    .text-copper { color: var(--copper); }
+    .text-copper-light { color: var(--copper-light); }
+    .bg-copper { background-color: var(--copper); }
+    .border-copper { border-color: var(--copper); }
+  </style>
+</head>
+<body class="text-white min-h-screen">
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 glass">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-3 group" onclick="showPublicView()">
+          <div class="w-14 h-14 rounded-full overflow-hidden logo-glow group-hover:scale-110 transition-transform border-2 border-[#b87333] bg-gradient-to-br from-[#1e40af] to-[#b87333] flex items-center justify-center">
+            <i class="fa-solid fa-shield-halved text-2xl text-white"></i>
+          </div>
+          <div>
+            <span class="text-2xl font-bold gradient-text">ANTONUCCI</span>
+            <span class="text-sm text-[#b87333] block font-medium tracking-wider">SOLUÇÕES</span>
+          </div>
+        </a>
+        
+        <div class="flex items-center gap-4">
+          <a href="#servicos" class="hidden md:block text-gray-300 hover:text-white transition-colors">Serviços</a>
+          <a href="#portfolio" class="hidden md:block text-gray-300 hover:text-white transition-colors">Portfólio</a>
+          <a href="#contato" class="hidden md:block text-gray-300 hover:text-white transition-colors">Contato</a>
+          
+          <button onclick="openLoginModal()" class="px-4 py-2 bg-gradient-to-r from-[#1e40af] to-[#b87333] hover:from-[#1e3a8a] hover:to-[#a0522d] text-white rounded-lg transition-all flex items-center gap-2 border border-[#b87333]/30">
+            <i class="fa-solid fa-lock"></i>
+            <span class="hidden sm:inline">Admin</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Public View -->
+  <div id="publicView" class="pt-20">
+    <!-- Hero Section -->
+    <section class="relative py-20 px-4 overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-[#1e40af]/20 via-[#b87333]/10 to-[#1e40af]/20"></div>
+      <div class="absolute top-20 left-10 w-72 h-72 bg-[#1e40af]/20 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-20 right-10 w-96 h-96 bg-[#b87333]/10 rounded-full blur-3xl"></div>
+      
+      <div class="relative max-w-7xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1e40af]/10 border border-[#b87333]/30 text-[#b87333] text-sm mb-6"
+        >
+          <i class="fa-solid fa-star"></i>
+          <span>Especialistas em Climatização, Elétrica e Solar</span>
+        </div>
+        
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
+          <span class="gradient-text">Antonucci</span> Soluções
+        </h1>
+        
+        <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
+          Instalação e manutenção de ar condicionado, máquinas de lavar, 
+          limpeza de placas solares e serviços elétricos residenciais e comerciais.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="#portfolio" class="px-8 py-4 bg-gradient-to-r from-[#1e40af] to-[#b87333] hover:from-[#1e3a8a] hover:to-[#a0522d] text-white font-semibold rounded-xl transition-all transform hover:scale-105 border border-[#b87333]/30"
+          >
+            Ver Portfólio
+          </a>
+          <a href="https://wa.me/5511999999999" target="_blank" class="px-8 py-4 glass hover:bg-white/10 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2 border border-[#b87333]/30"
+          >
+            <i class="fa-brands fa-whatsapp text-green-400"></i>
+            Solicitar Orçamento
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="servicos" class="py-20 px-4">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">Nossos <span class="gradient-text">Serviços</span></h2>
+          <p class="text-gray-400">Soluções completas para sua casa ou empresa</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Service Cards -->
+          <div class="glass rounded-2xl p-6 card-hover border border-[#b87333]/20"
+          >
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#1e40af]/30 to-[#b87333]/30 flex items-center justify-center mb-4 border border-[#b87333]/30"
+            >
+              <i class="fa-solid fa-snowflake text-2xl text-[#60a5fa]"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-[#b87333]">Ar Condicionado</h3>
+            <p class="text-gray-400 text-sm">Instalação, manutenção e limpeza completa de ar condicionado split e janela.</p>
+          </div>
+          
+          <div class="glass rounded-2xl p-6 card-hover border border-[#b87333]/20"
+          >
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#1e40af]/30 to-[#b87333]/30 flex items-center justify-center mb-4 border border-[#b87333]/30"
+            >
+              <i class="fa-solid fa-shirt text-2xl text-[#60a5fa]"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-[#b87333]">Máquina de Lavar</h3>
+            <p class="text-gray-400 text-sm">Conserto e manutenção preventiva de máquinas de lavar de todas as marcas.</p>
+          </div>
+          
+          <div class="glass rounded-2xl p-6 card-hover border border-[#b87333]/20"
+          >
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#1e40af]/30 to-[#b87333]/30 flex items-center justify-center mb-4 border border-[#b87333]/30"
+            >
+              <i class="fa-solid fa-solar-panel text-2xl text-[#fbbf24]"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-[#b87333]">Placas Solares</h3>
+            <p class="text-gray-400 text-sm">Limpeza especializada e manutenção de placas solares para máximo rendimento.</p>
+          </div>
+          
+          <div class="glass rounded-2xl p-6 card-hover border border-[#b87333]/20"
+          >
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#1e40af]/30 to-[#b87333]/30 flex items-center justify-center mb-4 border border-[#b87333]/30"
+            >
+              <i class="fa-solid fa-bolt text-2xl text-[#fbbf24]"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-[#b87333]">Serviços Elétricos</h3>
+            <p class="text-gray-400 text-sm">Instalações elétricas residenciais e comerciais com total segurança.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-20 px-4">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">Nossos <span class="gradient-text">Trabalhos</span></h2>
+          <p class="text-gray-400">Confira alguns dos nossos projetos realizados</p>
+        </div>
+        
+        <div id="portfolioGrid" class="grid-masonry">
+          <!-- Portfolio items will be loaded here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contato" class="py-20 px-4">
+      <div class="max-w-7xl mx-auto">
+        <div class="glass rounded-3xl p-8 md:p-12">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div>
+              <h2 class="text-3xl font-bold mb-4">Entre em <span class="gradient-text">Contato</span></h2>
+              <p class="text-gray-400 mb-8">Solicite um orçamento sem compromisso. Atendemos em toda a região.</p>
+              
+              <div class="space-y-4">
+                <a href="https://wa.me/5511999999999" target="_blank" class="flex items-center gap-4 p-4 glass rounded-xl hover:bg-white/10 transition-colors">
+                  <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
+                    <i class="fa-brands fa-whatsapp text-xl text-green-400"></i>
+                  </div>
+                  <div>
+                    <div class="font-semibold">WhatsApp</div>
+                    <div class="text-gray-400 text-sm">(11) 99999-9999</div>
+                  </div>
+                </a>
+                
+                <div class="flex items-center gap-4 p-4 glass rounded-xl">
+                  <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+                    <i class="fa-solid fa-envelope text-xl text-blue-400"></i>
+                  </div>
+                  <div>
+                    <div class="font-semibold">Email</div>
+                    <div class="text-gray-400 text-sm">contato@antonucci.com.br</div>
+                  </div>
+                </div>
+                
+                <div class="flex items-center gap-4 p-4 glass rounded-xl">
+                  <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
+                    <i class="fa-brands fa-instagram text-xl text-purple-400"></i>
+                  </div>
+                  <div>
+                    <div class="font-semibold">Instagram</div>
+                    <div class="text-gray-400 text-sm">@antonuccisolucoes</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="glass rounded-2xl p-6">
+              <h3 class="text-xl font-semibold mb-4">Solicitar Orçamento</h3>
+              <form class="space-y-4">
+                <input type="text" placeholder="Seu nome" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-blue-500 transition-colors">
+                <input type="tel" placeholder="Seu telefone" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-blue-500 transition-colors">
+                <select class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-blue-500 transition-colors">
+                  <option value="">Selecione o serviço</option>
+                  <option value="ar">Ar Condicionado</option>
+                  <option value="lavadora">Máquina de Lavar</option>
+                  <option value="solar">Placas Solares</option>
+                  <option value="eletrica">Serviços Elétricos</option>
+                </select>
+                <textarea placeholder="Descreva o que você precisa" rows="4" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-blue-500 transition-colors resize-none"></textarea>
+                
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl transition-all">
+                  Enviar Solicitação
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 px-4 border-t border-white/10">
+      <div class="max-w-7xl mx-auto text-center text-gray-500">
+        <p>© 2024 Antonucci Soluções. Todos os direitos reservados.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Admin Panel -->
+  <div id="adminPanel" class="admin-panel pt-20 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h1 class="text-3xl font-bold">Painel <span class="gradient-text">Administrativo</span></h1>
+          <p class="text-gray-400">Gerencie o portfólio de trabalhos</p>
+        </div>
+        
+        <button onclick="logout()" class="px-4 py-2 glass hover:bg-white/10 text-white rounded-lg transition-colors flex items-center gap-2">
+          <i class="fa-solid fa-sign-out-alt"></i>
+          Sair
+        </button>
+      </div>
+
+      <!-- Add Work Form -->
+      <div class="glass rounded-2xl p-6 mb-8">
+        <h2 class="text-xl font-semibold mb-6 flex items-center gap-2">
+          <i class="fa-solid fa-plus-circle text-blue-400"></i>
+          Adicionar Novo Trabalho
+        </h2>
+        
+        <form id="addWorkForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-400 mb-2">Imagem do Trabalho</label>
+            <div class="border-2 border-dashed border-white/20 rounded-xl p-8 text-center hover:border-blue-500/50 transition-colors cursor-pointer" onclick="document.getElementById('workImage').click()">
+              <input type="file" id="workImage" accept="image/*" class="hidden" onchange="previewImage(this)">
+              <div id="imagePreview" class="hidden">
+                <img id="previewImg" class="max-h-48 mx-auto rounded-lg">
+              </div>
+              <div id="uploadPlaceholder">
+                <i class="fa-solid fa-cloud-upload-alt text-4xl text-gray-500 mb-2"></i>
+                <p class="text-gray-400">Clique para selecionar uma imagem</p>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2">Título</label>
+            <input type="text" id="workTitle" placeholder="Ex: Instalação Ar Condicionado" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-blue-500 transition-colors" required>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2">Categoria</label>
+            <select id="workCategory" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-blue-500 transition-colors">
+              <option value="ar">Ar Condicionado</option>
+              <option value="lavadora">Máquina de Lavar</option>
+              <option value="solar">Placas Solares</option>
+              <option value="eletrica">Elétrica</option>
+            </select>
+          </div>
+          
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-400 mb-2">Descrição</label>
+            <textarea id="workDescription" placeholder="Descreva o trabalho realizado..." rows="3" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-blue-500 transition-colors resize-none"></textarea>
+          </div>
+          
+          <div class="md:col-span-2">
+            <button type="submit" class="px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl transition-all flex items-center gap-2">
+              <i class="fa-solid fa-plus"></i>
+              Adicionar ao Portfólio
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Works List -->
+      <div class="glass rounded-2xl p-6">
+        <h2 class="text-xl font-semibold mb-6">Trabalhos no Portfólio</h2>
+        
+        <div id="adminWorksList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Works will be listed here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <div class="glass rounded-2xl p-8 w-full max-w-md">
+      <div class="text-center mb-6">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+          <i class="fa-solid fa-lock text-2xl text-white"></i>
+        </div>
+        <h2 class="text-2xl font-bold">Acesso Administrativo</h2>
+        <p class="text-gray-400 text-sm">Digite suas credenciais para continuar</p>
+      </div>
+      
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-400 mb-1">Usuário</label>
+          <input type="text" id="username" value="admin" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-blue-500 transition-colors">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-400 mb-1">Senha</label>
+          <input type="password" id="password" value="admin123" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-blue-500 transition-colors">
+        </div>
+        
+        <button type="submit" class="w-full py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl transition-all">
+          Entrar
+        </button>
+      </form>
+      
+      <button onclick="closeLoginModal()" class="mt-4 w-full py-2 text-gray-400 hover:text-white transition-colors">
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Data storage
+    let works = JSON.parse(localStorage.getItem('antonucci_works')) || [
+      {
+        id: 1,
+        title: 'Instalação Ar Condicionado',
+        category: 'ar',
+        description: 'Instalação completa de ar condicionado split 12000 BTUs em residência.',
+        image: 'https://images.unsplash.com/photo-1585338107529-13afc5f02586?w=600',
+        date: '2024-01-15'
+      },
+      {
+        id: 2,
+        title: 'Limpeza Placas Solares',
+        category: 'solar',
+        description: 'Limpeza e manutenção de sistema fotovoltaico residencial.',
+        image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600',
+        date: '2024-01-10'
+      },
+      {
+        id: 3,
+        title: 'Manutenção Lavadora',
+        category: 'lavadora',
+        description: 'Conserto e manutenção preventiva de máquina de lavar.',
+        image: 'https://images.unsplash.com/photo-1626806775351-538068a21838?w=600',
+        date: '2024-01-05'
+      }
+    ];
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      renderPortfolio();
+      renderAdminWorks();
+    });
+
+    // Login Modal
+    function openLoginModal() {
+      document.getElementById('loginModal').classList.add('active');
+    }
+
+    function closeLoginModal() {
+      document.getElementById('loginModal').classList.remove('active');
+    }
+
+    // Login
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      if (username === 'admin' && password === 'admin123') {
+        closeLoginModal();
+        showAdminPanel();
+      } else {
+        alert('Usuário ou senha incorretos!');
+      }
+    });
+
+    // Show/Hide Views
+    function showPublicView() {
+      document.getElementById('publicView').style.display = 'block';
+      document.getElementById('adminPanel').classList.remove('active');
+    }
+
+    function showAdminPanel() {
+      document.getElementById('publicView').style.display = 'none';
+      document.getElementById('adminPanel').classList.add('active');
+      renderAdminWorks();
+    }
+
+    function logout() {
+      showPublicView();
+    }
+
+    // Image Preview
+    function previewImage(input) {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          document.getElementById('previewImg').src = e.target.result;
+          document.getElementById('imagePreview').classList.remove('hidden');
+          document.getElementById('uploadPlaceholder').classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Add Work
+    document.getElementById('addWorkForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const title = document.getElementById('workTitle').value;
+      const category = document.getElementById('workCategory').value;
+      const description = document.getElementById('workDescription').value;
+      const imageFile = document.getElementById('workImage').files[0];
+      
+      const newWork = {
+        id: Date.now(),
+        title,
+        category,
+        description,
+        date: new Date().toISOString().split('T')[0]
+      };
+      
+      if (imageFile) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          newWork.image = e.target.result;
+          works.unshift(newWork);
+          saveWorks();
+          renderPortfolio();
+          renderAdminWorks();
+          e.target.form.reset();
+          document.getElementById('imagePreview').classList.add('hidden');
+          document.getElementById('uploadPlaceholder').classList.remove('hidden');
+          alert('Trabalho adicionado com sucesso!');
+        };
+        reader.readAsDataURL(imageFile);
+      } else {
+        // Use placeholder based on category
+        const placeholders = {
+          ar: 'https://images.unsplash.com/photo-1585338107529-13afc5f02586?w=600',
+          lavadora: 'https://images.unsplash.com/photo-1626806775351-538068a21838?w=600',
+          solar: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600',
+          eletrica: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=600'
+        };
+        newWork.image = placeholders[category];
+        works.unshift(newWork);
+        saveWorks();
+        renderPortfolio();
+        renderAdminWorks();
+        e.target.reset();
+        alert('Trabalho adicionado com sucesso!');
+      }
+    });
+
+    // Delete Work
+    function deleteWork(id) {
+      if (confirm('Tem certeza que deseja excluir este trabalho?')) {
+        works = works.filter(w => w.id !== id);
+        saveWorks();
+        renderPortfolio();
+        renderAdminWorks();
+      }
+    }
+
+    // Save Works
+    function saveWorks() {
+      localStorage.setItem('antonucci_works', JSON.stringify(works));
+    }
+
+    // Render Portfolio (Public)
+    function renderPortfolio() {
+      const grid = document.getElementById('portfolioGrid');
+      
+      grid.innerHTML = works.map(work => {
+        const categoryLabels = {
+          ar: 'Ar Condicionado',
+          lavadora: 'Máquina de Lavar',
+          solar: 'Placas Solares',
+          eletrica: 'Elétrica'
+        };
+        
+        return `
+          <div class="glass rounded-2xl overflow-hidden card-hover group animate-fade-in">
+            <div class="relative aspect-square overflow-hidden">
+              <img src="${work.image}" alt="${work.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform">
+                <p class="text-white text-sm">${work.description || 'Clique para ver mais detalhes'}</p>
+              </div>
+            </div>
+            <div class="p-4">
+              <span class="text-xs text-blue-400 font-medium">${categoryLabels[work.category]}</span>
+              <h3 class="text-lg font-semibold mt-1">${work.title}</h3>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Render Admin Works List
+    function renderAdminWorks() {
+      const list = document.getElementById('adminWorksList');
+      
+      if (works.length === 0) {
+        list.innerHTML = `
+          <div class="col-span-full text-center py-12 text-gray-400">
+            <i class="fa-solid fa-inbox text-4xl mb-4"></i>
+            <p>Nenhum trabalho cadastrado</p>
+          </div>
+        `;
+        return;
+      }
+      
+      const categoryLabels = {
+        ar: 'Ar Condicionado',
+        lavadora: 'Máquina de Lavar',
+        solar: 'Placas Solares',
+        eletrica: 'Elétrica'
+      };
+      
+      list.innerHTML = works.map(work => `
+        <div class="glass rounded-xl overflow-hidden">
+          <img src="${work.image}" alt="${work.title}" class="w-full h-40 object-cover">
+          <div class="p-4">
+            <span class="text-xs text-blue-400">${categoryLabels[work.category]}</span>
+            <h3 class="font-semibold mt-1">${work.title}</h3>
+            <p class="text-sm text-gray-400 mt-1 line-clamp-2">${work.description || ''}</p>
+            <button onclick="deleteWork(${work.id})" class="mt-3 px-4 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors text-sm flex items-center gap-2">
+              <i class="fa-solid fa-trash"></i>
+              Excluir
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>
